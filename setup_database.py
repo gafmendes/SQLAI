@@ -1,8 +1,9 @@
+import os
 from langchain_community.utilities import SQLDatabase
 from langchain_ollama import OllamaLLM
 from langchain_experimental.sql import SQLDatabaseChain
 from dotenv import load_dotenv
-import os
+from llm_split import OllamaLLMSplit
 
 load_dotenv()
 
@@ -16,7 +17,7 @@ db = SQLDatabase.from_uri(
 
 # Carregar modelo Ollama
 # Usamos temperature = 0 pois queremos o modelo determinístico e preciso
-llm = OllamaLLM(
+llm = OllamaLLMSplit(
     model = "codellama",
     temperature = 0
 )
@@ -30,7 +31,7 @@ db_chain = SQLDatabaseChain.from_llm(
     )
 
 # Questão do Usuário
-question = "Qual produto gerou a maior receita? Retorne apenas o primeiro resultado."
+question = "Qual produto gerou a maior receita? Retorne os cinco primeiros resultados."
 
 # Gerar e executar consulta SQL
 response = db_chain.invoke(
